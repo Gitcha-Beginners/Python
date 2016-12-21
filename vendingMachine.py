@@ -11,6 +11,7 @@ class VendingMachine:
             "비락식혜": 600,
             "데자와": 700,
             "게토레이": 800,
+            "토마토주스":900
         }
 
     def start(self):
