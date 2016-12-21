@@ -1,4 +1,4 @@
-import random
+# -*- coding: utf-8 -*-
 
 class MyDic:
     def __init__(self):
