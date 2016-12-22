@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
+import sys
 
 class MyDic:
     def __init__(self):
+        self.dicBook = {chr(alpa):[] for alpa in range(97,123)}
+        try:
+            f = open('words.txt','r')
+        except Exception:
+            print("파일을 열 수 없습니다")
+            sys.exit(-1)
 
-        self.dicBook = [[] for i in range(26)]
-        f = open('words.txt','r')
         words = f.read().lower().split()
         words.sort()
-
-        for i in range(0,len(words)):
-            self.dicBook[ord(words[i][0]) - 97].append(words[i])
         f.close()
+
+        for get in words:
+            self.dicBook[get[0]].append(get)
+
 
     def start(self):
         menu =0
@@ -18,7 +24,7 @@ class MyDic:
             menu = self.showMenu()
             if menu == 1:
                 word = input("찾을 단어를 입력 해주세요 : ")
-                self.showSearchResult(self.search(word))
+                self.search(word)
             elif menu == 2:
                 word = input("추가할 단어를 입력 해주세요 : ")
                 self.insert(word)
@@ -40,65 +46,54 @@ class MyDic:
         print("1. Search 2. Insert 3. Delete 4. Save 5. select print 6. exit")
         return int(input("메뉴를 선택해 주세요 : "))
 
-    def showSearchResult(self,result):
-        if result == -1:
-            print("단어를 찾지 못하였습니다")
-            return
-        print("{}단어를 찾았습니다".format(result))
-
-
     def search(self, getWord):
-        index = ord(getWord[0])-97
+        index = getWord[0]
         tempList = self.dicBook[index]
 
-        for word in tempList:
-            if word == getWord:
-                return word
-        return -1
+        if getWord in self.dicBook[index]:
+            print("{}단어를 찾았습니다".format(getWord))
+        else:
+            print("단어를 찾지 못하였습니다")
+
 
     def insert(self , getWord):
-        if(self.search(getWord)!=-1):
+        index = getWord[0]
+        if getWord in self.dicBook[index]:
             print("원래 있는 단어입니다")
         else:
-            index = ord(getWord[0])-97
             self.dicBook[index].append(getWord)
             self.dicBook[index].sort()
             print(self.dicBook[index])
             print("{} 단어 추가에 성공했습니다".format(getWord))
 
     def deleteWord(self,getWord):
-        if(self.search(getWord)==-1):
+        index = getWord[0]
+        if getWord not in self.dicBook[index]:
             print("단어가 존재하지 않습니다")
         else:
-            index = ord(getWord[0]) - 97
-            tempList = self.dicBook[index]
-            for wordInfo in enumerate(tempList):
-                if wordInfo[1] == getWord:
-                    del self.dicBook[index][wordInfo[0]]
-                    print("{}번째 원소 삭제에 성공했습니다".format(wordInfo[0]))
-                    print(self.dicBook[index])
-                    break
+            self.dicBook.get(index).remove(getWord)
+            print("{} 원소 삭제에 성공했습니다".format(getWord))
 
     def saveDic(self):
         f = open("ResultList.txt","w")
-        for i in range(26):
-            f.write("{} : ".format(chr(i+97)))
-            f.write(" ".join(self.dicBook[i]))
+        for i in range(97, 123):
+            f.write("{} : ".format(chr(i)))
+            f.write(" ".join(self.dicBook[chr(i)]))
             f.write("\n\n")
         f.close()
 
         f = open("words.txt","w")
-        for i in range(26):
-            f.write(" ".join(self.dicBook[i]))
+        for i in range(97, 123):
+            f.write(" ".join(self.dicBook[chr(i)]))
 
         f.close()
 
     def selectPrint(self,getCh):
-        if(len(getCh)>1):
+        if(len(getCh) > 1):
             print("올바르지 않은 입력입니다")
             return
         print("{} : ".format(getCh))
-        tempList= self.dicBook[ord(getCh)-97]
+        tempList= self.dicBook[getCh]
         print(" ".join(tempList))
         print("\n\n")
 
