@@ -1,2 +1,2 @@
 # Python
-a simple repo for getting experience about python scripts
+Extra ordinary repo for getting experience about python scripts
